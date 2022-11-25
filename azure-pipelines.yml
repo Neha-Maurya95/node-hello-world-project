@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-imageName: nehamaurya/nodejs-helloworldapp
+  imageName: nehamaurya/nodejs-helloworldapp
 
 steps:
 - task: Docker@2
