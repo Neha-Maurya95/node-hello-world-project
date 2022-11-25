@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  imageName : nehamaurya/nodejs-helloworldapp
+imageName: nehamaurya/nodejs-helloworldapp
 
 steps:
 - task: Docker@2
@@ -18,13 +18,12 @@ steps:
   inputs:
     command: 'login'
     containerRegistry: 'dockerhub-connection'
-    
+  
 - task: Docker@2
   inputs:
-  displayName: running docker build
-  input: 
-    repository: '$(imageName):$(Build.BuildId)''
+    containerRegistry: 'dockerhub-connection'
+    repository: '$(imageName)'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: '**/Dockerfile' 
 
 
