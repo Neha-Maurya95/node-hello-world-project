@@ -24,6 +24,6 @@ steps:
     containerRegistry: 'dockerhub-connection'
     repository: '$(imageName)'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile' 
+    Dockerfile: './Dockerfile' 
 
 
