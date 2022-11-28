@@ -3,7 +3,7 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-variables:
+- variables:
   imageName: 'nehamaurya/nodejs-helloworldapp'
   vmImageName: 'ubuntu-latest'
   dockerRegistryServiceConnection: 'dockerhub-connection'
@@ -16,8 +16,6 @@ variables:
     displayName: Build Job 
     pool:
       vmImage: $(vmImageName) 
-    trigger:
-    - dev
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
@@ -26,5 +24,4 @@ variables:
         repository: '$(imageName)':'$(Build.BuildId)'
         command: 'buildAndPush'
         Dockerfile: $(dockerRegistryServiceConnection) 
-
 
