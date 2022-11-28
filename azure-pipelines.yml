@@ -9,6 +9,11 @@ variables:
    dockerRegistryServiceConnection: 'dockerhub-connection'
    dockerfilePath: './Dockerfile'
    tag: '$(Build.BuildId)'
+   imagePullSecrets: regcred
+   azureSubscriptionEndpoint: Contoso (optional)
+   azureContainerRegistry: contoso.azurecr.io (optional)
+   azureResourceGroup: Contoso (optional)
+   kubernetesCluster: Contoso (optional)
 
 stages:
 - stage: Build
@@ -22,9 +27,25 @@ stages:
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
-        containerRegistry: $(dockerRegistryServiceConnection)
+        containerRegistry: '$(dockerRegistryServiceConnection)'
         repository: '$(imageName)'
         command: 'buildAndPush'
         Dockerfile: '$(dockerfilePath)' 
         tag: |
-          $(tag)
+          '$(tag)'
+          
+- stage: Deploy
+   displayName: Deploy stage
+   dependsOn: Build
+   steps:
+    - task: KubernetesManifest@0
+      displayName: Deploy to Kubernetes cluster
+      inputs:
+        action: deploy
+        namespace: $(k8sNamespace)
+        manifests: |
+          $(dockerRegistryServiceConnection)'/k8s/deployment.yml
+        #imagePullSecrets: |
+         # $(imagePullSecret)
+        containers: |
+          $(containerRegistry)/$(imageRepository):$(tag)

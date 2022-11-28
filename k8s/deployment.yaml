@@ -14,7 +14,7 @@ spec:
       spec:
         containers:
         - name: demo-app
-          image:  ACRHERE.azurecr.io/demo-app:v1
+          image: nehamaurya/nodejs-helloworldapp:28
           imagePullPolicy: Always
           readinessProbe:
             httpGet:
