@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: demo-app
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: demo-app
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8000
+    targetPort: 8080
 

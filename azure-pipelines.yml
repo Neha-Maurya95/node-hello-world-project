@@ -53,5 +53,6 @@ stages:
         namespace: $(k8sNamespace)
         manifests: |
           k8s/deployment.yaml
+          k8s/service.yaml
         containers: |
           $(containerRegistry)/$(imageRepository):$(tag)
