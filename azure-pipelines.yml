@@ -3,25 +3,26 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-- variables:
-    imageName: 'nehamaurya/nodejs-helloworldapp'
-    vmImageName: 'ubuntu-latest'
-    dockerRegistryServiceConnection: 'dockerhub-connection'
-    dockerfilePath: './Dockerfile'
+variables:
+   imageName: 'nehamaurya/nodejs-helloworldapp'
+   vmImageName: 'ubuntu-latest'
+   dockerRegistryServiceConnection: 'dockerhub-connection'
+   dockerfilePath: './Dockerfile'
 
+stages:
 - stage: Build
-   displayName: Build stage
-   jobs:
-   - job: Build
-     displayName: Build Job 
-     pool:
-       vmImage: $(vmImageName) 
-     steps:
-     - task: Docker@2
-       displayName: Build and push an image to container registry
-       inputs:
-         containerRegistry: $(dockerRegistryServiceConnection)
-         repository: '$(imageName)':'$(Build.BuildId)'
-         command: 'buildAndPush'
-         Dockerfile: $(dockerRegistryServiceConnection) 
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build Job 
+    pool:
+      vmImage: $(vmImageName) 
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: '$(imageName)':'$(Build.BuildId)'
+        command: 'buildAndPush'
+        Dockerfile: $(dockerRegistryServiceConnection) 
 
