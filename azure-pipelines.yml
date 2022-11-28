@@ -48,11 +48,9 @@ stages:
       displayName: Deploy to Kubernetes cluster
       inputs:
         action: deploy
-        kubernetesServiceConnection: '$(kubernetesServiceConnection)
+        kubernetesServiceConnection: '$(kubernetesServiceConnection)'
         namespace: $(k8sNamespace)
         manifests: |
           $(dockerRegistryServiceConnection)'/k8s/deployment.yml
-        #imagePullSecrets: |
-         # $(imagePullSecret)
         containers: |
           $(containerRegistry)/$(imageRepository):$(tag)
