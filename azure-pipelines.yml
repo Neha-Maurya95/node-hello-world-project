@@ -24,16 +24,16 @@ stages:
     displayName: Build Job 
     pool:
       vmImage: $(vmImageName) 
-    steps:
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        containerRegistry: '$(dockerRegistryServiceConnection)'
-        repository: '$(imageName)'
-        command: 'buildAndPush'
-        Dockerfile: '$(dockerfilePath)' 
-        tag: |
-          '$(tag)'
+    #steps:
+    #- task: Docker@2
+    #  displayName: Build and push an image to container registry
+    # inputs:
+    #    containerRegistry: '$(dockerRegistryServiceConnection)'
+    #    repository: '$(imageName)'
+    #    command: 'buildAndPush'
+    #    Dockerfile: '$(dockerfilePath)' 
+    #    tag: |
+    #      '$(tag)'
           
 - stage: Deploy
   displayName: Deploy stage
@@ -51,6 +51,6 @@ stages:
         kubernetesServiceConnection: '$(kubernetesServiceConnection)'
         namespace: $(k8sNamespace)
         manifests: |
-          $(dockerRegistryServiceConnection)'/k8s/deployment.yml
+          $(dockerRegistryServiceConnection)'/k8s/deployment.yaml
         containers: |
           $(containerRegistry)/$(imageRepository):$(tag)
