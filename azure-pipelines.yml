@@ -14,6 +14,7 @@ variables:
    azureContainerRegistry: contoso.azurecr.io (optional)
    azureResourceGroup: Contoso (optional)
    kubernetesCluster: Contoso (optional)
+   kubernetesServiceConnection: 
 
 stages:
 - stage: Build
@@ -38,8 +39,8 @@ stages:
   displayName: Deploy stage
   dependsOn: Build
   jobs:
-  - job: Build
-    displayName: Build Job 
+  - job: Deploy
+    displayName: Deploy Job 
     pool:
       vmImage: $(vmImageName) 
     steps:
@@ -47,6 +48,7 @@ stages:
       displayName: Deploy to Kubernetes cluster
       inputs:
         action: deploy
+        kubernetesServiceConnection: ''$(k8s cluster credential)'
         namespace: $(k8sNamespace)
         manifests: |
           $(dockerRegistryServiceConnection)'/k8s/deployment.yml
