@@ -38,9 +38,9 @@ stages:
   displayName: Deploy stage
   dependsOn: Build
   steps:
-    - task: KubernetesManifest@0
-      displayName: Deploy to Kubernetes cluster
-      inputs:
+  - task: KubernetesManifest@0
+    displayName: Deploy to Kubernetes cluster
+    inputs:
         action: deploy
         namespace: $(k8sNamespace)
         manifests: |
