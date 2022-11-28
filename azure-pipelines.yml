@@ -51,6 +51,6 @@ stages:
         kubernetesServiceConnection: '$(kubernetesServiceConnection)'
         namespace: $(k8sNamespace)
         manifests: |
-          $(dockerRegistryServiceConnection)'/k8s/deployment.yaml
+          '$(dockerRegistryServiceConnection)'/k8s/deployment.yaml
         containers: |
           $(containerRegistry)/$(imageRepository):$(tag)
