@@ -16,14 +16,6 @@ spec:
         - name: demo-app
           image: nehamaurya/nodejs-helloworldapp:28
           imagePullPolicy: Always
-          readinessProbe:
-            httpGet:
-              port: 8000
-              path: /
-          livenessProbe:
-            httpGet:
-              port: 8000
-              path: /
           resources:
             requests:
               memory: "128Mi"
