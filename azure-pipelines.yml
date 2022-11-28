@@ -15,6 +15,7 @@ variables:
    azureResourceGroup: Contoso (optional)
    kubernetesCluster: Contoso (optional)
    kubernetesServiceConnection: 'k8s cluster credential'
+   k8sNamespace: 'default'
 
 stages:
 - stage: Build
