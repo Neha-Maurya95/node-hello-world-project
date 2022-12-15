@@ -22,11 +22,11 @@ stages:
 - stage: Build
   displayName: Build stage
   jobs:
-  - job: Build
-    displayName: Build Job 
-    pool:
-      vmImage: $(vmImageName) 
-    steps:
+  # - job: Build
+    # displayName: Build Job 
+    # pool:
+      # vmImage: $(vmImageName) 
+    # steps:
     # - task: Docker@2
       # displayName: Build and push an image to container registry
       # inputs:
@@ -42,10 +42,10 @@ stages:
   dependsOn: Build
   jobs:
   - job: Deploy
-    displayName: Deploy Job 
-    pool:
-      vmImage: $(vmImageName) 
-    steps:
+    # displayName: Deploy Job 
+    # pool:
+      # vmImage: $(vmImageName) 
+    # steps:
     # - task: KubernetesManifest@0
       # displayName: Deploy to Kubernetes cluster
       # inputs:
