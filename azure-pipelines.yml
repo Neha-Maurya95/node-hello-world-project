@@ -19,9 +19,9 @@ variables:
    k8sNamespace: 'default'
 
 stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
+# - stage: Build
+  # displayName: Build stage
+  # jobs:
   # - job: Build
     # displayName: Build Job 
     # pool:
@@ -37,11 +37,11 @@ stages:
         # tag: |
           # '$(tag)'
           
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  jobs:
-  - job: Deploy
+# - stage: Deploy
+  # displayName: Deploy stage
+  # dependsOn: Build
+  # jobs:
+  # - job: Deploy
     # displayName: Deploy Job 
     # pool:
       # vmImage: $(vmImageName) 
