@@ -60,7 +60,6 @@ stages:
           
           
 - stage: Deploy
-  dependsOn: Update
   displayName: Deploy
   pool:
     vmImage: $(vmImageName)
