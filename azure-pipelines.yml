@@ -58,7 +58,23 @@ stages:
         # containers: |
           # $(containerRegistry)/$(imageRepository):$(tag)
           
-          
+- stage: test
+  displayName: test
+  pool:
+    vmImage: $(vmImageName)
+  jobs:
+    - job: test 
+      displayName: test Helm Chart
+      steps:
+      - task: CopyFilesOverSSH@0
+        inputs:
+          sshEndpoint: 'bastion'
+          sourceFolder: '.'
+          contents: 'Dockerfile'
+          targetFolder: '/home/AKSVirtualMachine'
+          readyTimeout: '20000'
+         
+
 - stage: Deploy
   displayName: Deploy
   pool:
