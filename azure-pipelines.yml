@@ -3,6 +3,8 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
 variables:
    # image tag 
    imageName: 'nehamaurya/nodejs-helloworldapp'
@@ -19,7 +21,7 @@ variables:
    k8sNamespace: 'default'
 
 stages:
-# - stage: Build
+ - stage: Build
   # displayName: Build stage
   # jobs:
   # - job: Build
@@ -37,56 +39,24 @@ stages:
         # tag: |
           # '$(tag)'
           
-# - stage: Deploy
-  # displayName: Deploy stage
-  # dependsOn: Build
-  # jobs:
-  # - job: Deploy
-    # displayName: Deploy Job 
-    # pool:
-      # vmImage: $(vmImageName) 
-    # steps:
-    # - task: KubernetesManifest@0
-      # displayName: Deploy to Kubernetes cluster
-      # inputs:
-        # action: deploy
-        # kubernetesServiceConnection: '$(kubernetesServiceConnection)'
-        # namespace: $(k8sNamespace)
-        # manifests: |
-          # k8s/deployment.yaml
-          # k8s/service.yaml
-        # containers: |
-          # $(containerRegistry)/$(imageRepository):$(tag)
+ - stage: Deploy
+   displayName: Deploy stage
+   dependsOn: Build
+   jobs:
+   - job: Deploy
+     displayName: Deploy Job 
+     pool:
+       vmImage: $(vmImageName) 
+     steps:
+     - task: KubernetesManifest@0
+       displayName: Deploy to Kubernetes cluster
+       inputs:
+         action: deploy
+         kubernetesServiceConnection: '$(kubernetesServiceConnection)'
+         namespace: $(k8sNamespace)
+         manifests: |
+           k8s/deployment.yaml
+           k8s/service.yaml
+         containers: |
+           $(containerRegistry)/$(imageRepository):$(tag)
           
-- stage: test
-  displayName: test
-  pool:
-    vmImage: $(vmImageName)
-  jobs:
-    - job: test 
-      displayName: test Helm Chart
-      steps:
-      - task: CopyFilesOverSSH@0
-        inputs:
-          sshEndpoint: 'bastion'
-          sourceFolder: '.'
-          contents: 'Dockerfile'
-          targetFolder: '/home/AKSVirtualMachine'
-          readyTimeout: '20000'
-         
-
-- stage: Deploy
-  displayName: Deploy
-  pool:
-    vmImage: $(vmImageName)
-  jobs:
-    - job: Deploy 
-      displayName: Deploying Helm Chart
-      steps:
-         - task: SSH@0
-           inputs:
-             sshEndpoint: 'bastion'
-             runOptions: 'inline'
-             inline: |
-               ls
-             readyTimeout: '20000'
