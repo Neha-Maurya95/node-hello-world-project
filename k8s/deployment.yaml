@@ -17,10 +17,4 @@ spec:
           image: nehamaurya/nodejs-helloworldapp:28
           imagePullPolicy: Always
           command: ["npm", "start" ]
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+
