@@ -3,28 +3,60 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- dev
-
-pool:
-  vmImage: ubuntu-latest
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
-  imageName : nehamaurya/nodejs-helloworldapp
+   # image tag 
+   imageName: 'nehamaurya/nodejs-helloworldapp'
+   vmImageName: 'ubuntu-latest'
+   dockerRegistryServiceConnection: 'dockerhub-connection'
+   dockerfilePath: './Dockerfile'
+   tag: '$(Build.BuildId)'
+   imagePullSecrets: regcred
+   azureSubscriptionEndpoint: Contoso (optional)
+   azureContainerRegistry: contoso.azurecr.io (optional)
+   azureResourceGroup: Contoso (optional)
+   kubernetesCluster: Contoso (optional)
+   kubernetesServiceConnection: 'k8s cluster credential'
+   k8sNamespace: 'default'
 
-steps:
-- task: Docker@2
-  displayName: Login to Dockerhub
-  inputs:
-    command: 'login'
-    containerRegistry: 'dockerhub-connection'
-    
-- task: Docker@2
-  inputs:
-  displayName: running docker build
-  input: 
-    repository: '$(imageName):$(Build.BuildId)''
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-
-
+stages:
+ - stage: Build
+   displayName: Build stage
+   jobs:
+   - job: Build
+     displayName: Build Job 
+     pool:
+       vmImage: $(vmImageName) 
+     steps:
+     - task: Docker@2
+       displayName: Build and push an image to container registry
+       inputs:
+         containerRegistry: '$(dockerRegistryServiceConnection)'
+         repository: '$(imageName)'
+         command: 'buildAndPush'
+         Dockerfile: '$(dockerfilePath)' 
+         tag: |
+           '$(tag)'
+          
+ - stage: Deploy
+   displayName: Deploy stage
+   dependsOn: Build
+   jobs:
+   - job: Deploy
+     displayName: Deploy Job 
+     pool:
+       vmImage: $(vmImageName) 
+     steps:
+     - task: KubernetesManifest@0
+       displayName: Deploy to Kubernetes cluster
+       inputs:
+         action: deploy
+         kubernetesServiceConnection: '$(kubernetesServiceConnection)'
+         namespace: $(k8sNamespace)
+         manifests: |
+           k8s/deployment.yaml
+           k8s/service.yaml
+         containers: |
+           $(containerRegistry)/$(imageRepository):$(tag)
+          
